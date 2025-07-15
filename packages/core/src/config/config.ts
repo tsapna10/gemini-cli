@@ -589,6 +589,7 @@ export class Config {
     registerCoreTool(GetRepositoryGroupTool, this);
     registerCoreTool(CreateRepositoryGroupTool, this);
     registerCoreTool(DeleteRepositoryGroupTool, this);
+    registerCoreTool(UpdateRepositoryGroupTool, this);
 
     await registry.discoverTools();
     return registry;
