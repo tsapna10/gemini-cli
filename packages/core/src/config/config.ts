@@ -583,6 +583,7 @@ export class Config {
     registerCoreTool(DeleteCRITool, this);
     registerCoreTool(UpdateCRITool, this);
     registerCoreTool(ListRepositoryGroupsTool, this);
+    registerCoreTool(GetRepositoryGroupTool, this);
 
     await registry.discoverTools();
     return registry;
