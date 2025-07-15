@@ -573,6 +573,7 @@ export class Config {
     registerCoreTool(MemoryTool);
     registerCoreTool(WebSearchTool, this);
     registerCoreTool(ListCRITool, this);
+    registerCoreTool(GetCRITool, this);
 
     await registry.discoverTools();
     return registry;
