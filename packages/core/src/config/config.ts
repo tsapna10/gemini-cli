@@ -591,6 +591,7 @@ export class Config {
     registerCoreTool(CreateRepositoryGroupTool, this);
     registerCoreTool(DeleteRepositoryGroupTool, this);
     registerCoreTool(UpdateRepositoryGroupTool, this);
+    registerCoreTool(ListGitRepositoryLinksTool, this);
 
     await registry.discoverTools();
     return registry;
