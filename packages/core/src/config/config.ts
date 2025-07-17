@@ -46,7 +46,7 @@ import {
 } from './models.js';
 import { ClearcutLogger } from '../telemetry/clearcut-logger/clearcut-logger.js';
 
-import { ListCRITool } from '../tools/ListCRI.js';
+import { ListCRITool } from '../tools/code-customization-setup/ListCRI.js';
 
 
 
