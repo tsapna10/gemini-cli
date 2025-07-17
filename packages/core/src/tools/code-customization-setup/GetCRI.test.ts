@@ -6,8 +6,8 @@
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { GetCRITool } from '../tools/GetCRI.js';
+import { Config } from '../../config/config.js';
+import { GetCRITool } from '../code-customization-setup/GetCRI.js';
 
 // Mock the Gaxios class
 vi.mock('gaxios', () => {

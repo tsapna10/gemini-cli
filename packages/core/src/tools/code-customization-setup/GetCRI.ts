@@ -4,26 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios } from 'gaxios';
-import { SchemaValidator } from '../utils/schemaValidator.js';
 import { Type } from '@google/genai';
-import { T } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js';
+// Import the shared interface
+import { CodeRepositoryIndex } from './api-interfaces.js';
 
-// Interface for the expected JSON output item
-interface CodeRepositoryIndex {
-  name: string;
-  displayName?: string;
-  createTime?: string;
-  updateTime?: string;
-  state?: string;
-  etag?: string;
-  labels?: Record<string, string>; // Added labels property
-  kmsKey?: string;
-}
 
 /**
  * Parameters for the GetCodeRepositoryIndexTool.
@@ -54,7 +43,7 @@ export interface GetCodeRepositoryIndexParams {
  * Result from the GetCodeRepositoryIndexTool.
  */
 export interface GetCodeRepositoryIndexResult extends ToolResult {
-  index?: CodeRepositoryIndex;
+  index?: CodeRepositoryIndex; // Uses imported interface
 }
 
 /**
@@ -109,13 +98,13 @@ export class GetCRITool extends BaseTool<
   }
 
   validateParams(params: GetCodeRepositoryIndexParams): string | null {
-    if (!params.indexId || params.indexId.trim() === '') {
+    if (!params.indexId?.trim()) {
       return "The 'indexId' parameter cannot be empty.";
     }
-    if (!params.location || params.location.trim() === '') {
+    if (!params.location?.trim()) {
       return "The 'location' parameter cannot be empty.";
     }
-    if (!params.projectId || params.projectId.trim() === '') {
+    if (!params.projectId?.trim()) {
       return "The 'projectId' parameter cannot be empty.";
     }
     return null;
