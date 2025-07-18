@@ -6,8 +6,8 @@
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { DeleteCRITool } from '../tools/DeleteCRI.js';
+import { Config } from '../../config/config.js';
+import { DeleteCRITool } from './DeleteCRI.js';
 // Mock the Gaxios class
 vi.mock('gaxios', () => {
   const Gaxios = vi.fn();

@@ -49,6 +49,7 @@ import { ClearcutLogger } from '../telemetry/clearcut-logger/clearcut-logger.js'
 import { ListCRITool } from '../tools/code-customization-setup/ListCRI.js';
 import { GetCRITool } from '../tools/code-customization-setup/GetCRI.js';
 import { CreateCRITool } from '../tools/code-customization-setup/CreateCRI.js';
+import { DeleteCRITool } from '../tools/code-customization-setup/DeleteCRI.js';
 
 
 

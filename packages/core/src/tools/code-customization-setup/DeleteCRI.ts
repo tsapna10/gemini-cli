@@ -4,32 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios } from 'gaxios';
-import { SchemaValidator } from '../utils/schemaValidator.js';
 import { Type } from '@google/genai';
-
-// Interface for the Long Running Operation metadata
-interface OperationMetadata {
-  '@type': string;
-  createTime?: string;
-  target?: string;
-  verb?: string;
-  requestedCancellation?: boolean;
-  apiVersion?: string;
-}
-
-// Interface for the Long Running Operation response
-interface LongRunningOperation {
-  name: string;
-  metadata?: OperationMetadata;
-  done: boolean;
-  error?: { code: number; message: string; details?: any[] };
-  response?: any;
-}
+// Import the shared interface
+import { LongRunningOperation } from './api-interfaces.js';
 
 /**
  * Parameters for the DeleteCodeRepositoryIndexTool.
@@ -60,7 +42,7 @@ export interface DeleteCodeRepositoryIndexParams {
  * Result from the DeleteCodeRepositoryIndexTool.
  */
 export interface DeleteCodeRepositoryIndexResult extends ToolResult {
-  operation?: LongRunningOperation;
+  operation?: LongRunningOperation; // Uses imported interface
 }
 
 /**
@@ -107,7 +89,6 @@ export class DeleteCRITool extends BaseTool<
       },
     );
 
-    // Initialize GoogleAuth
     this.auth = new GoogleAuth({
       scopes: ['https://www.googleapis.com/auth/cloud-platform'],
     });
@@ -115,13 +96,13 @@ export class DeleteCRITool extends BaseTool<
   }
 
   validateParams(params: DeleteCodeRepositoryIndexParams): string | null {
-    if (!params.indexId || params.indexId.trim() === '') {
+    if (!params.indexId?.trim()) {
       return "The 'indexId' parameter cannot be empty.";
     }
-    if (!params.location || params.location.trim() === '') {
+    if (!params.location?.trim()) {
       return "The 'location' parameter cannot be empty.";
     }
-    if (!params.projectId || params.projectId.trim() === '') {
+    if (!params.projectId?.trim()) {
       return "The 'projectId' parameter cannot be empty.";
     }
     return null;
@@ -132,10 +113,9 @@ export class DeleteCRITool extends BaseTool<
   }
 
   getApiEndpoint(environment: 'prod' | 'staging' = 'staging'): string {
-    if (environment === 'prod') {
-      return 'https://cloudaicompanion.googleapis.com';
-    }
-    return 'https://staging-cloudaicompanion.sandbox.googleapis.com';
+    return environment === 'prod'
+      ? 'https://cloudaicompanion.googleapis.com'
+      : 'https://staging-cloudaicompanion.sandbox.googleapis.com';
   }
 
   async execute(
@@ -155,7 +135,6 @@ export class DeleteCRITool extends BaseTool<
     const indexId = params.indexId;
 
     try {
-      // 1. Get Auth Client and Token
       const authClient = await this.auth.getClient();
       const token = await authClient.getAccessToken();
       if (!token.token) {
@@ -169,14 +148,12 @@ export class DeleteCRITool extends BaseTool<
         'X-Goog-User-Project': projectId,
       };
 
-      // 2. Construct the API URL for DELETE
       const endpoint = this.getApiEndpoint(env);
       const indexName = `projects/${projectId}/locations/${location}/codeRepositoryIndexes/${indexId}`;
       const apiUrl = `${endpoint}/v1/${indexName}?alt=json`;
 
       console.log(`Calling API: DELETE ${apiUrl}`);
 
-      // 3. Make the DELETE API call
       const response: GaxiosResponse<LongRunningOperation> =
         await this.client.request<LongRunningOperation>({
           url: apiUrl,
@@ -192,7 +169,6 @@ export class DeleteCRITool extends BaseTool<
 
       const operation = response.data;
 
-      // 4. Format the output for the LLM
       const formattedOutput = `Delete request issued for index "${indexId}".
 Operation Name: ${operation.name}
 Status: ${operation.done ? 'Completed' : 'In Progress'}
