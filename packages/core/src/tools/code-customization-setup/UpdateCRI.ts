@@ -4,43 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { v4 as uuidv4 } from 'uuid';
 import { Type } from '@google/genai';
+// Import the shared interfaces
+import { CodeRepositoryIndex, LongRunningOperation } from './api-interfaces.js';
 
-// Interface for the CodeRepositoryIndex resource
-interface CodeRepositoryIndex {
-  name: string;
-  createTime?: string;
-  updateTime?: string;
-  state?: string;
-  labels?: Record<string, string>;
-  kmsKey?: string;
-  etag?: string;
-}
-
-// Interface for the Long Running Operation metadata
-interface OperationMetadata {
-  '@type': string;
-  createTime?: string;
-  target?: string;
-  verb?: string;
-  requestedCancellation?: boolean;
-  apiVersion?: string;
-}
-
-// Interface for the Long Running Operation response
-interface LongRunningOperation {
-  name: string;
-  metadata?: OperationMetadata;
-  done: boolean;
-  error?: { code: number; message: string; details?: any[] };
-  response?: any;
-}
 
 // Interface for the fields within CodeRepositoryIndex that can be included in the PATCH body
 interface CodeRepositoryIndexUpdateBody {
@@ -78,7 +51,7 @@ export interface UpdateCodeRepositoryIndexParams {
  * Result from the UpdateCodeRepositoryIndexTool.
  */
 export interface UpdateCodeRepositoryIndexResult extends ToolResult {
-  operation?: LongRunningOperation;
+  operation?: LongRunningOperation; // Uses imported interface
 }
 
 /**
@@ -120,12 +93,10 @@ export class UpdateCRITool extends BaseTool<
           },
           setLabels: {
             type: Type.OBJECT,
-            //items: { type: Type.STRING },
             description: 'Replace all labels with this set.',
           },
           updateLabels: {
             type: Type.OBJECT,
-            //items: { type: Type.STRING },
             description: 'Add or update these labels.',
           },
           clearLabels: { type: Type.BOOLEAN, description: 'Remove all labels.' },
@@ -203,7 +174,7 @@ export class UpdateCRITool extends BaseTool<
       console.error(
         `Gaxios request to ${options.url} failed: ${msg} - ${details}`,
       );
-      throw error; // Re-throw to be caught in execute
+      throw error; 
     }
   }
 
