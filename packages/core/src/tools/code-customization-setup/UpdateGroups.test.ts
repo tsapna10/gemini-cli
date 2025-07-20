@@ -6,8 +6,8 @@
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { UpdateRepositoryGroupTool } from '../tools/UpdateGroups.js'; 
+import { Config } from '../../config/config.js';
+import { UpdateRepositoryGroupTool } from './UpdateGroups.js'; 
 
 // Mock the Gaxios class and uuid
 vi.mock('gaxios', () => {

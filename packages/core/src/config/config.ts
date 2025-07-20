@@ -55,6 +55,7 @@ import { ListRepositoryGroupsTool } from '../tools/code-customization-setup/List
 import { GetRepositoryGroupTool } from '../tools/code-customization-setup/GetGroups.js';
 import { CreateRepositoryGroupTool } from '../tools/code-customization-setup/CreateGroups.js';
 import { DeleteRepositoryGroupTool } from '../tools/code-customization-setup/DeleteGroups.js';
+import { UpdateRepositoryGroupTool } from '../tools/code-customization-setup/UpdateGroups.js';
 
 
 
