@@ -4,26 +4,14 @@ Copyright 2025 Google LLC
 SPDX-License-Identifier: Apache-2.0
 */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { Type } from '@google/genai';
-
-// Interface for a single GitRepositoryLink resource
-interface GitRepositoryLink {
-  name: string;
-  cloneUri: string;
-  createTime?: string;
-  updateTime?: string;
-  deleteTime?: string;
-  labels?: Record<string, string>;
-  etag?: string;
-  reconciling?: boolean;
-  annotations?: Record<string, string>;
-  uid?: string;
-}
+// Import the shared interface
+import { GitRepositoryLink } from './api-interfaces.js';
 
 /**
  * Parameters for the GetGitRepositoryLinkTool.
@@ -45,7 +33,7 @@ export interface GetGitRepositoryLinkParams {
  * Result from the GetGitRepositoryLinkTool.
  */
 export interface GetGitRepositoryLinkResult extends ToolResult {
-  gitRepositoryLink?: GitRepositoryLink;
+  gitRepositoryLink?: GitRepositoryLink; 
 }
 
 /**

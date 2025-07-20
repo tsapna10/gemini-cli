@@ -6,8 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { GetGitRepositoryLinkTool } from '../tools/GetRepoLinks.js'; 
+import { Config } from '../../config/config.js';
+import { GetGitRepositoryLinkTool } from './GetRepoLinks.js'; 
 
 // Mock the Gaxios class
 vi.mock('gaxios', () => {
