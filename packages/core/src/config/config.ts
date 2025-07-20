@@ -56,7 +56,7 @@ import { GetRepositoryGroupTool } from '../tools/code-customization-setup/GetGro
 import { CreateRepositoryGroupTool } from '../tools/code-customization-setup/CreateGroups.js';
 import { DeleteRepositoryGroupTool } from '../tools/code-customization-setup/DeleteGroups.js';
 import { UpdateRepositoryGroupTool } from '../tools/code-customization-setup/UpdateGroups.js';
-
+import { ListGitRepositoryLinksTool } from '../tools/code-customization-setup/ListRepoLinks.js';
 
 
 export enum ApprovalMode {

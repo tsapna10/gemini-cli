@@ -6,8 +6,8 @@
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { ListGitRepositoryLinksTool } from '../tools/ListRepoLinks.js'; 
+import { Config } from '../../config/config.js';
+import { ListGitRepositoryLinksTool } from './ListRepoLinks.js'; 
 
 // Mock the Gaxios class
 vi.mock('gaxios', () => {
@@ -28,8 +28,8 @@ describe('ListGitRepositoryLinksTool', () => {
   };
 
   const mockLinks = [
-      { name: 'link-1', uri: 'http://example.com/repo1', reconciling: false },
-      { name: 'link-2', uri: 'http://example.com/repo2', reconciling: true },
+      { name: 'link-1', cloneUri: 'http://example.com/repo1', reconciling: false },
+      { name: 'link-2', cloneUri: 'http://example.com/repo2', reconciling: true },
   ];
 
   beforeEach(() => {

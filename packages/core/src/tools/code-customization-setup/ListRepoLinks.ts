@@ -4,29 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { Type } from '@google/genai';
+// Import the shared interface
+import { GitRepositoryLink } from './api-interfaces.js';
 
-// Interface for a single GitRepositoryLink resource
-interface GitRepositoryLink {
-  name: string;
-  uri: string;
-  createTime?: string;
-  updateTime?: string;
-  deleteTime?: string;
-  etag?: string;
-  reconciling?: boolean;
-  annotations?: Record<string, string>;
-  labels?: Record<string, string>;
-}
-
-// Interface for the list API response
+// --- LOCAL INTERFACES ---
+// This interface is specific to the list API response for this tool.
 interface ListGitRepositoryLinksResponse {
-  gitRepositoryLinks?: GitRepositoryLink[];
+  gitRepositoryLinks?: GitRepositoryLink[]; // Uses imported interface
   nextPageToken?: string;
   unreachable?: string[];
 }
@@ -45,7 +35,7 @@ export interface ListGitRepositoryLinksParams {
   /** Optional. Number of items to fetch per page. */
   pageSize?: number;
   /** Optional. API environment. Defaults to 'prod' as this is not a preview API. */
-  environment?: 'prod' | 'staging'; // Staging kept for consistency, but defaults to prod
+  environment?: 'prod' | 'staging';
   /** Optional. Filter string (AIP-160). */
   filter?: string;
   /** Optional. Order by string (AIP-132). */
@@ -56,7 +46,7 @@ export interface ListGitRepositoryLinksParams {
  * Result from the ListGitRepositoryLinksTool.
  */
 export interface ListGitRepositoryLinksResult extends ToolResult {
-  gitRepositoryLinks?: GitRepositoryLink[];
+  gitRepositoryLinks?: GitRepositoryLink[]; // Uses imported interface
 }
 
 /**
@@ -172,7 +162,7 @@ export class ListGitRepositoryLinksTool extends BaseTool<
         ? allLinks.map((link, i) => 
             `Link ${i + 1}:
   Name: ${link.name}
-  URI: ${link.uri}
+  URI: ${link.cloneUri}
   Created: ${link.createTime || 'N/A'}
   Reconciling: ${link.reconciling || false}`
           ).join('\n\n')
