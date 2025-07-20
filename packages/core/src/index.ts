@@ -64,6 +64,7 @@ export * from './tools/code-customization-setup/UpdateCRI.js';
 export * from './tools/code-customization-setup/ListGroups.js';
 export * from './tools/code-customization-setup/GetGroups.js';
 export * from './tools/code-customization-setup/CreateGroups.js';
+export * from './tools/code-customization-setup/DeleteGroups.js';
 
 // Export telemetry functions
 export * from './telemetry/index.js';

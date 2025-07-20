@@ -4,32 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { v4 as uuidv4 } from 'uuid';
 import { Type } from '@google/genai';
-
-// Interface for the Long Running Operation metadata
-interface OperationMetadata {
-  '@type': string;
-  createTime?: string;
-  target?: string;
-  verb?: string;
-  requestedCancellation?: boolean;
-  apiVersion?: string;
-}
-
-// Interface for the Long Running Operation response
-interface LongRunningOperation {
-  name: string;
-  metadata?: OperationMetadata;
-  done: boolean;
-  error?: { code: number; message: string; details?: any[] };
-  response?: any;
-}
+// Import the shared interface
+import { LongRunningOperation } from './api-interfaces.js';
 
 /**
  * Parameters for the DeleteRepositoryGroupTool.
@@ -54,7 +37,7 @@ export interface DeleteRepositoryGroupParams {
  * Result from the DeleteRepositoryGroupTool.
  */
 export interface DeleteRepositoryGroupResult extends ToolResult {
-  operation?: LongRunningOperation;
+  operation?: LongRunningOperation; // Uses imported interface
 }
 
 /**
@@ -193,11 +176,7 @@ export class DeleteRepositoryGroupTool extends BaseTool<
 
       const urlParams = new URLSearchParams();
       urlParams.append('alt', 'json');
-      if (params.requestId) {
-        urlParams.append('requestId', params.requestId);
-      } else {
-        urlParams.append('requestId', uuidv4());
-      }
+      urlParams.append('requestId', params.requestId || uuidv4());
 
       const apiUrl = `${endpoint}/v1/${groupName}?${urlParams.toString()}`;
 
