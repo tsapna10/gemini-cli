@@ -4,44 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { v4 as uuidv4 } from 'uuid';
 import { Type } from '@google/genai';
-import { T } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js';
-
-// Interface for a single repository within a group
-interface RepositoryRef {
-  resource: string;
-  branchPattern?: string;
-}
+// Import the shared interfaces
+import { RepositoryRef, LongRunningOperation } from './api-interfaces.js';
 
 // Interface for the RepositoryGroup resource (for request body)
 interface RepositoryGroupRequestBody {
   labels?: Record<string, string>;
-  repositories?: RepositoryRef[];
-}
-
-// Interface for the Long Running Operation metadata
-interface OperationMetadata {
-  '@type': string;
-  createTime?: string;
-  target?: string;
-  verb?: string;
-  requestedCancellation?: boolean;
-  apiVersion?: string;
-}
-
-// Interface for the Long Running Operation response
-interface LongRunningOperation {
-  name: string;
-  metadata?: OperationMetadata;
-  done: boolean;
-  error?: { code: number; message: string; details?: any[] };
-  response?: any;
+  repositories?: RepositoryRef[]; 
 }
 
 /**
@@ -60,7 +36,7 @@ export interface CreateRepositoryGroupParams {
   /** Optional. Labels to apply to the new group. */
   labels?: Record<string, string>;
   /** Required. List of repositories to include in the group. */
-  repositories: RepositoryRef[];
+  repositories: RepositoryRef[]; // Uses imported interface
 
   /** Optional. API environment. Defaults to 'staging'. */
   environment?: 'prod' | 'staging';
@@ -72,7 +48,7 @@ export interface CreateRepositoryGroupParams {
  * Result from the CreateRepositoryGroupTool.
  */
 export interface CreateRepositoryGroupResult extends ToolResult {
-  operation?: LongRunningOperation;
+  operation?: LongRunningOperation; // Uses imported interface
 }
 
 /**
@@ -112,7 +88,7 @@ export class CreateRepositoryGroupTool extends BaseTool<
           },
           labels: {
             type: Type.OBJECT,
-            description: 'Optional. Labels for the new group.',      
+            description: 'Optional. Labels for the new group.',
           },
           repositories: {
             type: Type.ARRAY,
@@ -248,11 +224,7 @@ export class CreateRepositoryGroupTool extends BaseTool<
 
       const urlParams = new URLSearchParams();
       urlParams.append('repositoryGroupId', params.repositoryGroupId);
-      if (params.requestId) {
-        urlParams.append('requestId', params.requestId);
-      } else {
-        urlParams.append('requestId', uuidv4());
-      }
+      urlParams.append('requestId', params.requestId || uuidv4());
       urlParams.append('alt', 'json');
 
       const apiUrl = `${baseApiUrl}?${urlParams.toString()}`;
