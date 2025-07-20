@@ -4,30 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { Type } from '@google/genai';
+// Import the shared interface
+import { RepositoryGroup } from './api-interfaces.js';
 
-// Interface for a single repository within a group
-interface RepositoryRef {
-  resource: string;
-  branchPattern?: string;
-  // Fields from the log, potentially output-only
-  repositoryUri?: string;
-  connectionConfig?: string;
-}
-
-// Interface for a single Code Repository Group
-interface RepositoryGroup {
-  name: string;
-  createTime?: string;
-  updateTime?: string;
-  labels?: Record<string, string>;
-  repositories?: RepositoryRef[];
-}
 
 /**
  * Parameters for the GetRepositoryGroupTool.
@@ -50,7 +35,7 @@ export interface GetRepositoryGroupParams {
  * Result from the GetRepositoryGroupTool.
  */
 export interface GetRepositoryGroupResult extends ToolResult {
-  repositoryGroup?: RepositoryGroup;
+  repositoryGroup?: RepositoryGroup; // Uses imported interface
 }
 
 /**
@@ -140,15 +125,16 @@ export class GetRepositoryGroupTool extends BaseTool<
       );
     }
   }
+
   private formatLabels(labels?: Record<string, string>): string {
     if (!labels || Object.keys(labels).length === 0) {
-        return 'N/A';
+      return 'N/A';
     }
     return ('\n' + Object.entries(labels)
-        .map(([key, value]) => `    ${key}: ${value}`) // Corrected indentation
+        .map(([key, value]) => `    ${key}: ${value}`)
         .join('\n')
     );
-}
+  }
 
   async execute(
     params: GetRepositoryGroupParams,
@@ -208,7 +194,7 @@ export class GetRepositoryGroupTool extends BaseTool<
           '\n' +
           repositoryGroup.repositories
             .map(
-              (r) =>
+              (r: any) => 
                 `    - Resource: ${r.resource}\n      Branch Pattern: ${r.branchPattern || '.*'}\n      Repo URI: ${r.repositoryUri || 'N/A'}\n      Connection: ${r.connectionConfig || 'N/A'}`,
             )
             .join('\n');
@@ -240,7 +226,7 @@ export class GetRepositoryGroupTool extends BaseTool<
         displayError = `Error: Cloud AI Companion API (Staging) is not enabled. Please enable ${this.getApiEndpoint(env).replace('https://', '')} in the Google Cloud Console for project ${projectId}.`;
       } else if (errorMessage.includes('Failed to retrieve access token')) {
         displayError =
-          'Error: Authentication failed. Please run `gcloud auth login` and `gcloud auth application-default login`.';
+          'Error: Authentication failed. Please run \`gcloud auth login\` and \`gcloud auth application-default login\`.';
       } else if (errorMessage.includes('API call to')) {
         displayError = errorMessage;
       } else {
