@@ -72,6 +72,7 @@ export * from './tools/code-customization-setup/CreateRepoLinks.js';
 export * from './tools/code-customization-setup/DeleteRepoLinks.js';
 export * from './tools/code-customization-setup/ListConnections.js';
 export * from './tools/code-customization-setup/GetConnections.js';
+export * from './tools/code-customization-setup/CreateConnections.js';
 
 // Export telemetry functions
 export * from './telemetry/index.js';

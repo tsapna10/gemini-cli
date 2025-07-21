@@ -59,6 +59,37 @@ export interface RepositoryGroup {
 
 // --- DEVELOPER CONNECT API INTERFACES ---
 
+// Nested Config objects for Connections
+export interface OAuthCredential {
+    oauthTokenSecretVersion: string;
+}
+
+export interface UserCredential {
+    userTokenSecretVersion: string;
+}
+
+export interface GitHubConfig {
+    githubApp?: 'DEVELOPER_CONNECT' | 'FIREBASE';
+    //authorizerCredential?: OAuthCredential;
+    appInstallationId?: string;
+}
+
+export interface GitHubEnterpriseConfig {
+    hostUri: string;
+    appId: string;
+    privateKeySecretVersion: string;
+    webhookSecretSecretVersion: string;
+    appInstallationId?: string;
+}
+
+export interface GitLabConfig {
+    webhookSecretSecretVersion: string;
+    readAuthorizerCredential: UserCredential;
+    authorizerCredential: UserCredential;
+}
+// more configs can be added here
+
+
 /**
  * Represents a Connection resource from Developer Connect.
  */
@@ -72,8 +103,11 @@ export interface Connection {
   reconciling?: boolean;
   etag?: string;
   uid?: string;
-  // Other complex fields like githubConfig, installationState, etc., can be added here as needed.
-  [key: string]: any; // Allows for provider-specific config fields
+  // Provider-specific configurations
+  githubConfig?: GitHubConfig;
+  githubEnterpriseConfig?: GitHubEnterpriseConfig;
+  gitlabConfig?: GitLabConfig;
+  [key: string]: any;
 }
 
 /**
