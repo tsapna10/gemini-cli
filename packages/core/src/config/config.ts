@@ -61,6 +61,7 @@ import { GetGitRepositoryLinkTool } from '../tools/code-customization-setup/GetR
 import { CreateGitRepositoryLinkTool } from '../tools/code-customization-setup/CreateRepoLinks.js';
 import { DeleteGitRepositoryLinkTool } from '../tools/code-customization-setup/DeleteRepoLinks.js';
 import { ListConnectionsTool } from '../tools/code-customization-setup/ListConnections.js';
+import { GetConnectionTool } from '../tools/code-customization-setup/GetConnections.js';
 
 export enum ApprovalMode {
   DEFAULT = 'default',
@@ -599,6 +600,7 @@ export class Config {
     registerCoreTool(CreateGitRepositoryLinkTool, this);
     registerCoreTool(DeleteGitRepositoryLinkTool, this);
     registerCoreTool(ListConnectionsTool, this);
+    registerCoreTool(GetConnectionTool, this);
 
     await registry.discoverTools();
     return registry;
