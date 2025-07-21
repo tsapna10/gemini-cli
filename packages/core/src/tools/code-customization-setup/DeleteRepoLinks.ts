@@ -4,26 +4,15 @@ Copyright 2025 Google LLC
 SPDX-License-Identifier: Apache-2.0
 */
 
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { v4 as uuidv4 } from 'uuid';
 import { Type } from '@google/genai';
-
-// Interface for the long-running operation response
-interface Operation {
-  name: string;
-  metadata?: any;
-  done: boolean;
-  error?: {
-    code: number;
-    message: string;
-    details?: any[];
-  };
-  response?: any;
-}
+// Import the shared interface
+import { LongRunningOperation } from './api-interfaces.js';
 
 /**
  * Parameters for the DeleteGitRepositoryLinkTool.
@@ -52,8 +41,8 @@ export interface DeleteGitRepositoryLinkParams {
  * Result from the DeleteGitRepositoryLinkTool.
  */
 export interface DeleteGitRepositoryLinkResult extends ToolResult {
-  /** The name of the long-running operation resource. */
-  operationName?: string;
+  /** The long-running operation resource. */
+  operation?: LongRunningOperation;
 }
 
 /**
@@ -150,7 +139,7 @@ export class DeleteGitRepositoryLinkTool extends BaseTool<
 
       const apiUrl = `${endpoint}/v1/${resourceName}?${urlParams.toString()}`;
 
-      const response = await this.makeRequest<Operation>({
+      const response = await this.makeRequest<LongRunningOperation>({
         url: apiUrl,
         method: 'DELETE',
         headers,
@@ -161,8 +150,8 @@ export class DeleteGitRepositoryLinkTool extends BaseTool<
 
       return {
         llmContent: formattedOutput,
-        returnDisplay: `Successfully initiated deletion of Git Repository Link "${params.gitRepositoryLinkId}".`,
-        operationName: operation.name,
+        returnDisplay: `Successfully initiated deletion of Git Repository Link "${params.gitRepositoryLinkId}". Operation: ${operation.name}`,
+        operation: operation,
       };
 
     } catch (error: unknown) {

@@ -6,8 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { DeleteGitRepositoryLinkTool } from '../tools/DeleteRepoLinks.js'; 
+import { Config } from '../../config/config.js';
+import { DeleteGitRepositoryLinkTool } from './DeleteRepoLinks.js'; 
 
 // Mock the Gaxios class and uuid
 vi.mock('gaxios', () => {
@@ -62,8 +62,8 @@ describe('DeleteGitRepositoryLinkTool', () => {
 
       const result = await tool.execute(validParams);
 
-      expect(result.returnDisplay).toBe('Successfully initiated deletion of Git Repository Link "link-to-delete".');
-      expect(result.operationName).toBe(mockOperation.name);
+      expect(result.returnDisplay).toBe(`Successfully initiated deletion of Git Repository Link "link-to-delete". Operation: ${mockOperation.name}`);
+      expect(result.operation?.name).toBe(mockOperation.name);
 
       const requestOptions = requestSpy.mock.calls[0][0];
       expect(requestOptions?.method).toBe('DELETE');
