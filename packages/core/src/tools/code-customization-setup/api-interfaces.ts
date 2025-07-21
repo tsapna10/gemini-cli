@@ -60,6 +60,23 @@ export interface RepositoryGroup {
 // --- DEVELOPER CONNECT API INTERFACES ---
 
 /**
+ * Represents a Connection resource from Developer Connect.
+ */
+export interface Connection {
+  name: string;
+  createTime?: string;
+  updateTime?: string;
+  deleteTime?: string;
+  labels?: Record<string, string>;
+  disabled?: boolean;
+  reconciling?: boolean;
+  etag?: string;
+  uid?: string;
+  // Other complex fields like githubConfig, installationState, etc., can be added here as needed.
+  [key: string]: any; // Allows for provider-specific config fields
+}
+
+/**
  * Represents a Git Repository Link resource from Developer Connect.
  */
 export interface GitRepositoryLink {
