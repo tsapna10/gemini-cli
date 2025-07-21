@@ -1,35 +1,23 @@
 /**
 @license
 Copyright 2025 Google LLC
-SPDX-License-Identifier: Apache-2.0 */
-import { BaseTool, ToolResult } from './tools.js';
-import { Config } from '../config/config.js';
-import { getErrorMessage } from '../utils/errors.js';
+SPDX-License-Identifier: Apache-2.0
+*/
+
+import { BaseTool, ToolResult } from '../tools.js';
+import { Config } from '../../config/config.js';
+import { getErrorMessage } from '../../utils/errors.js';
 import { GoogleAuth } from 'google-auth-library';
 import { GaxiosResponse, Gaxios, GaxiosOptions } from 'gaxios';
 import { Type } from '@google/genai';
+// Import the shared interface
+import { LongRunningOperation } from './api-interfaces.js';
 
 // Interface for a single GitRepositoryLink resource for the request body
 interface GitRepositoryLinkBody {
   cloneUri: string;
   labels?: Record<string, string>;
   annotations?: Record<string, string>;
-}
-
-// Interface for the long-running operation response
-interface Operation {
-  name: string;
-  metadata?: any;
-  done: boolean;
-  error?: {
-    code: number;
-    message: string;
-    details?: any[];
-  };
-  response?: {
-    '@type': string;
-    [key: string]: any;
-  };
 }
 
 /**
@@ -60,10 +48,8 @@ export interface CreateGitRepositoryLinkParams {
  * Result from the CreateGitRepositoryLinkTool.
  */
 export interface CreateGitRepositoryLinkResult extends ToolResult {
-  /** The name of the long-running operation resource. */
-  operationName?: string;
-  /** The clone URI of the created link. */
-  cloneUri?: string;
+  /** The long-running operation resource. */
+  operation?: LongRunningOperation; 
 }
 
 /**
@@ -113,7 +99,6 @@ export class CreateGitRepositoryLinkTool extends BaseTool<
     return null;
   }
 
-  // Note: Developer Connect has a different endpoint from Cloud AI Companion.
   getApiEndpoint(environment: 'prod' | 'staging' = 'prod'): string {
     return environment === 'staging'
       ? 'https://staging-developerconnect.sandbox.googleapis.com'
@@ -159,12 +144,10 @@ export class CreateGitRepositoryLinkTool extends BaseTool<
         alt: 'json',
       });
       if (params.validateOnly) urlParams.append('validateOnly', 'true');
-      // A UUID can be generated for requestId if needed, but it's optional per docs
-      // urlParams.append('requestId', crypto.randomUUID());
-
+      
       const apiUrl = `${baseApiUrl}?${urlParams.toString()}`;
 
-       let processedCloneUri = params.cloneUri;
+      let processedCloneUri = params.cloneUri;
       if (!processedCloneUri.endsWith('.git')) {
         processedCloneUri += '.git';
       }
@@ -173,7 +156,7 @@ export class CreateGitRepositoryLinkTool extends BaseTool<
       if (params.labels) requestBody.labels = params.labels;
       if (params.annotations) requestBody.annotations = params.annotations;
 
-      const response = await this.makeRequest<Operation>({
+      const response = await this.makeRequest<LongRunningOperation>({
         url: apiUrl,
         method: 'POST',
         headers,
@@ -186,8 +169,7 @@ export class CreateGitRepositoryLinkTool extends BaseTool<
       return {
         llmContent: `Git Repository Link creation started. Operation details: ${formattedOutput}`,
         returnDisplay: `Successfully initiated creation of Git Repository Link "${params.gitRepositoryLinkId}".`,
-        operationName: operation.name,
-        cloneUri: params.cloneUri,
+        operation: operation,
       };
 
     } catch (error: unknown) {

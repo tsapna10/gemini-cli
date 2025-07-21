@@ -6,8 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Gaxios, GaxiosResponse } from 'gaxios';
-import { Config } from '../config/config.js';
-import { CreateGitRepositoryLinkTool } from '../tools/CreateRepoLinks.js'; 
+import { Config } from '../../config/config.js';
+import { CreateGitRepositoryLinkTool } from './CreateRepoLinks.js'; 
 
 // Mock the Gaxios class
 vi.mock('gaxios', () => {
@@ -60,8 +60,8 @@ describe('CreateGitRepositoryLinkTool', () => {
       const result = await tool.execute(validParams);
 
       expect(result.returnDisplay).toBe('Successfully initiated creation of Git Repository Link "my-new-link".');
-      expect(result.operationName).toBe(mockOperation.name);
-      expect(result.cloneUri).toBe(validParams.cloneUri);
+      expect(result.operation?.name).toBe(mockOperation.name);
+      
 
       const requestOptions = requestSpy.mock.calls[0][0];
       expect(requestOptions?.method).toBe('POST');
