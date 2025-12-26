@@ -57,6 +57,7 @@ import { CreateRepositoryGroupTool } from '../tools/code-customization-setup/Cre
 import { DeleteRepositoryGroupTool } from '../tools/code-customization-setup/DeleteGroups.js';
 import { UpdateRepositoryGroupTool } from '../tools/code-customization-setup/UpdateGroups.js';
 import { ListGitRepositoryLinksTool } from '../tools/code-customization-setup/ListRepoLinks.js';
+import { GetGitRepositoryLinkTool } from '../tools/code-customization-setup/GetRepoLinks.js';
 
 
 export enum ApprovalMode {
@@ -592,6 +593,7 @@ export class Config {
     registerCoreTool(DeleteRepositoryGroupTool, this);
     registerCoreTool(UpdateRepositoryGroupTool, this);
     registerCoreTool(ListGitRepositoryLinksTool, this);
+    registerCoreTool(GetGitRepositoryLinkTool, this);
 
     await registry.discoverTools();
     return registry;

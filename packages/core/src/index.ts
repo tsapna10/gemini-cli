@@ -67,6 +67,7 @@ export * from './tools/code-customization-setup/CreateGroups.js';
 export * from './tools/code-customization-setup/DeleteGroups.js';
 export * from './tools/code-customization-setup/UpdateGroups.js';
 export * from './tools/code-customization-setup/ListRepoLinks.js';
+export * from './tools/code-customization-setup/GetRepoLinks.js';
 
 // Export telemetry functions
 export * from './telemetry/index.js';
