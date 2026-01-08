@@ -50,6 +50,7 @@ import { ListCRITool } from '../tools/code-customization-setup/ListCRI.js';
 import { GetCRITool } from '../tools/code-customization-setup/GetCRI.js';
 import { CreateCRITool } from '../tools/code-customization-setup/CreateCRI.js';
 import { DeleteCRITool } from '../tools/code-customization-setup/DeleteCRI.js';
+import { UpdateCRITool } from '../tools/code-customization-setup/UpdateCRI.js';
 
 
 
@@ -579,6 +580,7 @@ export class Config {
     registerCoreTool(GetCRITool, this);
     registerCoreTool(CreateCRITool, this);
     registerCoreTool(DeleteCRITool, this);
+    registerCoreTool(UpdateCRITool, this);
 
     await registry.discoverTools();
     return registry;
