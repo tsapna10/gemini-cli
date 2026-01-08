@@ -55,6 +55,7 @@ import { ListRepositoryGroupsTool } from '../tools/code-customization-setup/List
 import { GetRepositoryGroupTool } from '../tools/code-customization-setup/GetGroups.js';
 import { CreateRepositoryGroupTool } from '../tools/code-customization-setup/CreateGroups.js';
 import { DeleteRepositoryGroupTool } from '../tools/code-customization-setup/DeleteGroups.js';
+import { UpdateRepositoryGroupTool } from '../tools/code-customization-setup/UpdateGroups.js';
 
 
 
@@ -589,6 +590,7 @@ export class Config {
     registerCoreTool(GetRepositoryGroupTool, this);
     registerCoreTool(CreateRepositoryGroupTool, this);
     registerCoreTool(DeleteRepositoryGroupTool, this);
+    registerCoreTool(UpdateRepositoryGroupTool, this);
 
     await registry.discoverTools();
     return registry;
